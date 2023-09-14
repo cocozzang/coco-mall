@@ -1,0 +1,210 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  username      String
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          Int       @default(1) // 1 : 구매자 , 2 : 판매자 , 3 : 관리자 
+
+  accounts    Account[]
+  sessions    Session[]
+  goods       Goods[]
+  review      Review[]
+  transaction Transaction[]
+
+  cart   Cart   @relation(fields: [cartId], references: [id])
+  cartId String @unique
+
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id])
+  wishlistId String   @unique
+}
+
+model Cart {
+  id       String     @id @default(cuid())
+  user     User?
+  cartItem CartItem[]
+}
+
+model CartItem {
+  id       String @id @default(cuid())
+  quantity Int
+
+  goods   Goods  @relation(fields: [goodsId], references: [id])
+  goodsId String
+
+  cart   Cart?   @relation(fields: [cartId], references: [id])
+  cartId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Wishlist {
+  id   String @id @default(cuid())
+  user User?
+
+  goods Goods[]
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  buyer       User     @relation(fields: [buyerId], references: [id])
+  buyerId     String
+  price       Int
+  deliveryFee Int
+  totalPrice  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  transactionItem TransactionItem[]
+}
+
+model TransactionItem {
+  id               String   @id @default(cuid())
+  quantity         Int
+  transactionState Int // 1:주문완료 , 2:상품준비중, 3:배송중, 4배송완료, 5:거래완료, 6: 리뷰완료, 7:취소/반품심사상태, 8: 반품배송중, 9:취소/반품완료 
+  isRated          Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  goods   Goods  @relation(fields: [goodsId], references: [id])
+  goodsId String
+
+  Transaction   Transaction? @relation(fields: [transactionId], references: [id])
+  transactionId String?
+}
+
+model Goods {
+  id          String   @id @default(cuid())
+  name        String
+  price       Int
+  deliveryFee Int
+  inventory   Int
+  isInventory Boolean  @default(true)
+  rate        BigInt
+  content     Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sellerId String
+  seller   User   @relation(fields: [sellerId], references: [id])
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  review            Review[]
+  imageUrl          GoodsImage[]
+  firstGoodsOption  FirstGoodsOption[]
+  SecondGoodsOption SecondGoodsOption[]
+  ThirdGoodsOption  ThirdGoodsOption[]
+  cartItem          CartItem[]
+  wishlist          Wishlist[]
+  TransactionItem   TransactionItem[]
+}
+
+model GoodsImage {
+  id String @id @default(cuid())
+
+  goods   Goods  @relation(fields: [goodsId], references: [id])
+  goodsId String
+}
+
+model FirstGoodsOption {
+  id         String @id @default(cuid())
+  goods      Goods  @relation(fields: [goodsId], references: [id])
+  goodsId    String
+  optionName String @unique
+
+  secondGoodsOption SecondGoodsOption[]
+}
+
+model SecondGoodsOption {
+  id         String @id @default(cuid())
+  goods      Goods  @relation(fields: [goodsId], references: [id])
+  goodsId    String
+  optionName String @unique
+
+  firstGoodsOption   FirstGoodsOption @relation(fields: [firstGoodsOptionId], references: [id])
+  firstGoodsOptionId String
+
+  thirdGoodsOption ThirdGoodsOption[]
+}
+
+model ThirdGoodsOption {
+  id         String @id @default(cuid())
+  goods      Goods  @relation(fields: [goodsId], references: [id])
+  goodsId    String
+  optionName String @unique
+
+  secondGoodsOption   SecondGoodsOption? @relation(fields: [secondGoodsOptionId], references: [id])
+  secondGoodsOptionId String?
+}
+
+model Category {
+  id    String  @id @default(cuid())
+  name  String
+  goods Goods[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content   String?
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  goods   Goods  @relation(fields: [goodsId], references: [id])
+  goodsId String
+
+  review ReviewImage[]
+}
+
+model ReviewImage {
+  id       String @id @default(cuid())
+  imageUrl String
+
+  Review   Review? @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId String?
+}
