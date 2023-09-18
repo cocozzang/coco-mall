@@ -40,11 +40,11 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   name          String?
-  username      String
+  username      String?   @unique
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  role          Int       @default(1) // 1 : 구매자 , 2 : 판매자 , 3 : 관리자 
+  role          Int       @default(1) // 1 : 일반회원 구매자 , 2 : 판매자 , 3 : 관리자 
 
   accounts    Account[]
   sessions    Session[]
@@ -52,11 +52,11 @@ model User {
   review      Review[]
   transaction Transaction[]
 
-  cart   Cart   @relation(fields: [cartId], references: [id])
-  cartId String @unique
+  cart   Cart?   @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId String? @unique
 
-  wishlist   Wishlist @relation(fields: [wishlistId], references: [id])
-  wishlistId String   @unique
+  wishlist   Wishlist? @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  wishlistId String?   @unique
 }
 
 model Cart {
@@ -69,7 +69,7 @@ model CartItem {
   id       String @id @default(cuid())
   quantity Int
 
-  goods   Goods  @relation(fields: [goodsId], references: [id])
+  goods   Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
   goodsId String
 
   cart   Cart?   @relation(fields: [cartId], references: [id])
@@ -123,6 +123,7 @@ model Goods {
   isInventory Boolean  @default(true)
   rate        BigInt
   content     Json?
+  state       Int // 1: 판매중 , 2: 재고소진 , 3: 등록심사신청상태 , 4: 판매중지
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -145,13 +146,13 @@ model Goods {
 model GoodsImage {
   id String @id @default(cuid())
 
-  goods   Goods  @relation(fields: [goodsId], references: [id])
+  goods   Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
   goodsId String
 }
 
 model FirstGoodsOption {
   id         String @id @default(cuid())
-  goods      Goods  @relation(fields: [goodsId], references: [id])
+  goods      Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
   goodsId    String
   optionName String @unique
 
@@ -160,11 +161,11 @@ model FirstGoodsOption {
 
 model SecondGoodsOption {
   id         String @id @default(cuid())
-  goods      Goods  @relation(fields: [goodsId], references: [id])
+  goods      Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
   goodsId    String
   optionName String @unique
 
-  firstGoodsOption   FirstGoodsOption @relation(fields: [firstGoodsOptionId], references: [id])
+  firstGoodsOption   FirstGoodsOption @relation(fields: [firstGoodsOptionId], references: [id], onDelete: Cascade)
   firstGoodsOptionId String
 
   thirdGoodsOption ThirdGoodsOption[]
@@ -172,11 +173,11 @@ model SecondGoodsOption {
 
 model ThirdGoodsOption {
   id         String @id @default(cuid())
-  goods      Goods  @relation(fields: [goodsId], references: [id])
+  goods      Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
   goodsId    String
   optionName String @unique
 
-  secondGoodsOption   SecondGoodsOption? @relation(fields: [secondGoodsOptionId], references: [id])
+  secondGoodsOption   SecondGoodsOption? @relation(fields: [secondGoodsOptionId], references: [id], onDelete: Cascade)
   secondGoodsOptionId String?
 }
 
@@ -192,7 +193,7 @@ model Review {
   updatedAt DateTime @updatedAt
   content   String?
 
-  author   User   @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
   goods   Goods  @relation(fields: [goodsId], references: [id])

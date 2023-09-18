@@ -1,4 +1,5 @@
-import Navbar from "@/components/layout/Navbar"
+import Navbar from "@/components/layout/navbar"
+import Providers from "@/components/providers"
 import "@/styles/globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
@@ -18,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={inter.className}>
-        <Navbar />
-        <div className="max-w-7xl mx-auto px-6">{children}</div>
+        <Providers>
+          <Navbar />
+          <div className="max-w-7xl mx-auto px-6">{children}</div>
+        </Providers>
       </body>
     </html>
   )

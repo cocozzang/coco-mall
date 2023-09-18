@@ -1,6 +1,6 @@
 "use client"
 
-import { Command, CommandInput } from "../ui/Command"
+import { Command, CommandInput } from "../ui/command"
 
 interface SearchBarProps {}
 
