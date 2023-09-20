@@ -56,6 +56,15 @@ export default function UserAccountNav({ session }: UserAccountNavProps) {
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
+            {session?.user.role === 2 && (
+              <>
+                <DropdownMenuItem>
+                  <Link href={"/seller"}>상품/판매 관리</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
+
             <DropdownMenuItem>
               <Link href={"/order"}>주문목록</Link>
             </DropdownMenuItem>
