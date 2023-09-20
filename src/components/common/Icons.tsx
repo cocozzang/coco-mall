@@ -1,4 +1,4 @@
-import { LucideProps, User, ShoppingCart, Search } from "lucide-react"
+import { LucideProps, User, ShoppingCart, Search, LogOut } from "lucide-react"
 
 interface IconsProps {
   className?: string
@@ -7,6 +7,7 @@ interface IconsProps {
 export const Icons = {
   user: User,
   cart: ShoppingCart,
+  logOut: LogOut,
   homeLogo: (props: IconsProps) => (
     <svg
       {...props}

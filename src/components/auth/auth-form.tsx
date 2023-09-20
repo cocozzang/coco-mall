@@ -6,14 +6,11 @@ import { cn } from "@/lib/utils"
 import { Icons } from "../common/Icons"
 import { signIn } from "next-auth/react"
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string
 }
 
-export default function UserAuthForm({
-  className,
-  ...props
-}: UserAuthFormProps) {
+export default function AuthForm({ className, ...props }: AuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const loginWithGoogle = () => {

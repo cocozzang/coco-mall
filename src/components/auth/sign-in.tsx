@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Icons } from "../common/Icons"
-import UserAuthForm from "./user-auth-form"
+import AuthForm from "./auth-form"
 
 interface SignInProps {}
 
@@ -13,17 +13,23 @@ export default function SignIn({}: SignInProps) {
         <p className="text-sm max-w-xs mx-auto">로그인하셈</p>
 
         {/* sign in form */}
-        <UserAuthForm />
+        <AuthForm />
 
+        {/* 
+
+        TODO: next-auth credential 만들고 회원가입넣기
+        
         <p className="px-8 text-center text-sm text-muted-foreground">
-          <span className="mr-2">꼬레딧이 처음인가용?</span>
+          <span className="mr-2">coco mall이 처음이신가요?</span>
           <Link
             href={"/sign-up"}
             className="hover:text-black text-sm underline underline-offset-2"
           >
             회원가입
           </Link>
-        </p>
+        </p> 
+        
+        */}
       </div>
     </div>
   )

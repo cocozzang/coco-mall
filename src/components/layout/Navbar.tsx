@@ -2,16 +2,13 @@ import Link from "next/link"
 import { Icons } from "../common/Icons"
 import SearchBar from "./searchBar"
 import { getAuthSession } from "@/lib/auth"
-import { Button, buttonVariants } from "../ui/button"
-import { signOut } from "next-auth/react"
-import UserAuth from "./user-auth"
+import UserAccountNav from "../user/user-account-nav"
+import { buttonVariants } from "../ui/button"
 
 interface NavbarProps {}
 
 export default async function Navbar({}: NavbarProps) {
   const session = await getAuthSession()
-
-  console.log(session)
 
   return (
     <div className="bg-zinc-100 border border-b-zinc-200">
@@ -22,13 +19,19 @@ export default async function Navbar({}: NavbarProps) {
 
         <SearchBar />
 
-        <div className="flex gap-8">
-          <Link href={"/cart"}>
-            <Icons.cart className="w-8 h-8" />
+        {session?.user ? (
+          <div className="flex gap-8">
+            {/* TODO: cart에 숫자 표시하기 react-query사용하여 server state랑 연동 */}
+            <Link href={"/cart"}>
+              <Icons.cart className="w-10 h-10" />
+            </Link>
+            <UserAccountNav session={session} />
+          </div>
+        ) : (
+          <Link href={"/sign-in"} className={buttonVariants()}>
+            로그인
           </Link>
-
-          <UserAuth session={session} />
-        </div>
+        )}
       </div>
     </div>
   )
