@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import Link from "next/link"
-import { Icons } from "../common/Icons"
+import { Icons } from "../common/icons"
 
 interface UserAccountNavProps {
   session?: Session | null
@@ -70,7 +70,7 @@ export default function UserAccountNav({ session }: UserAccountNavProps) {
             </DropdownMenuItem>
 
             <DropdownMenuItem>
-              <Link href={"/order"}>취소/반품</Link>
+              <Link href={"/cancel-return-refund"}>취소/반품</Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem>

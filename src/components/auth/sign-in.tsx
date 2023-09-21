@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Icons } from "../common/Icons"
+import { Icons } from "../common/icons"
 import AuthForm from "./auth-form"
 
 interface SignInProps {}

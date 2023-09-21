@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "../ui/button"
 import { cn } from "@/lib/utils"
-import { Icons } from "../common/Icons"
+import { Icons } from "../common/icons"
 import { signIn } from "next-auth/react"
 
 interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> {

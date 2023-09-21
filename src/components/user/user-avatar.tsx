@@ -3,7 +3,7 @@
 import { User } from "next-auth"
 import { Avatar, AvatarFallback } from "../ui/avatar"
 import Image from "next/image"
-import { Icons } from "../common/Icons"
+import { Icons } from "../common/icons"
 
 interface UserAvatarProps {
   user: Pick<User, "name" | "image">

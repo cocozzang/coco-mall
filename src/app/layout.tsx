@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/navbar"
 import Providers from "@/components/providers"
+import { Toaster } from "@/components/toaster/toaster"
 import "@/styles/globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
@@ -22,6 +23,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           <div className="max-w-7xl mx-auto px-6">{children}</div>
+          <Toaster />
         </Providers>
       </body>
     </html>

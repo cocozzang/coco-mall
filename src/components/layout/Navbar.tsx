@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Icons } from "../common/Icons"
+import { Icons } from "../common/icons"
 import SearchBar from "./searchBar"
 import { getAuthSession } from "@/lib/auth"
 import UserAccountNav from "../user/user-account-nav"
