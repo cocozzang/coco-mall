@@ -118,11 +118,12 @@ model Goods {
   id          String   @id @default(cuid())
   name        String
   price       Int
-  deliveryFee Int
-  inventory   Int
-  isInventory Boolean  @default(true)
-  rate        BigInt
+  deliveryFee Int      @default(0)
+  rating      BigInt   @default(0) // 별점 
+  reviewCount Int      @default(0)
   content     Json?
+  inventory   Int?
+  isInventory Boolean  @default(true)
   state       Int // 1: 판매중 , 2: 재고소진 , 3: 등록심사신청상태 , 4: 판매중지
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -133,52 +134,43 @@ model Goods {
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
 
-  review            Review[]
-  imageUrl          GoodsImage[]
-  firstGoodsOption  FirstGoodsOption[]
-  SecondGoodsOption SecondGoodsOption[]
-  ThirdGoodsOption  ThirdGoodsOption[]
-  cartItem          CartItem[]
-  wishlist          Wishlist[]
-  TransactionItem   TransactionItem[]
+  thumbnail String
+  image     GoodsImage[]
+
+  Option Option[]
+
+  review          Review[]
+  cartItem        CartItem[]
+  wishlist        Wishlist[]
+  TransactionItem TransactionItem[]
 }
 
 model GoodsImage {
-  id String @id @default(cuid())
+  id       String @id @default(cuid())
+  imageUrl String
 
   goods   Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
   goodsId String
 }
 
-model FirstGoodsOption {
+model Option {
   id         String @id @default(cuid())
-  goods      Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
-  goodsId    String
   optionName String @unique
+  inventory  Int?
 
-  secondGoodsOption SecondGoodsOption[]
+  goods   Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
+  goodsId String
+
+  optionValue OptionValue[]
 }
 
-model SecondGoodsOption {
-  id         String @id @default(cuid())
-  goods      Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
-  goodsId    String
-  optionName String @unique
+model OptionValue {
+  id        String @id @default(cuid())
+  value     String
+  inventory Int
 
-  firstGoodsOption   FirstGoodsOption @relation(fields: [firstGoodsOptionId], references: [id], onDelete: Cascade)
-  firstGoodsOptionId String
-
-  thirdGoodsOption ThirdGoodsOption[]
-}
-
-model ThirdGoodsOption {
-  id         String @id @default(cuid())
-  goods      Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
-  goodsId    String
-  optionName String @unique
-
-  secondGoodsOption   SecondGoodsOption? @relation(fields: [secondGoodsOptionId], references: [id], onDelete: Cascade)
-  secondGoodsOptionId String?
+  option   Option @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  optionId String
 }
 
 model Category {
@@ -189,9 +181,10 @@ model Category {
 
 model Review {
   id        String   @id @default(cuid())
+  rating    Int
+  content   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  content   String?
 
   author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String

@@ -10,8 +10,6 @@ interface NavbarProps {}
 export default async function Navbar({}: NavbarProps) {
   const session = await getAuthSession()
 
-  console.log(session?.user.role)
-
   return (
     <div className="bg-zinc-100 border border-b-zinc-200">
       <div className="py-4 px-6 max-w-7xl flex gap-3 mx-auto justify-between items-center">
