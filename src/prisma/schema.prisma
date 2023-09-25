@@ -45,6 +45,8 @@ model User {
   emailVerified DateTime?
   image         String?
   role          Int       @default(1) // 1 : 일반회원 구매자 , 2 : 판매자 , 3 : 관리자 
+  zipcode       String?
+  address       String?
 
   accounts    Account[]
   sessions    Session[]
@@ -93,6 +95,8 @@ model Transaction {
   price       Int
   deliveryFee Int
   totalPrice  Int
+  zipcode     String
+  address     String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
