@@ -10,9 +10,11 @@ import { useToast } from "@/hooks/use-toast"
 import { ToastAction } from "../toaster/toast"
 import { useCustomToast } from "@/hooks/use-custom-toast"
 
-interface SellerAccessProps {}
+interface SellerAccessProps {
+  className?: string
+}
 
-export default function SellerAccess({}: SellerAccessProps) {
+export default function SellerAccess({ className }: SellerAccessProps) {
   const router = useRouter()
   const { toast } = useToast()
   const { loginToast } = useCustomToast()
@@ -54,7 +56,11 @@ export default function SellerAccess({}: SellerAccessProps) {
   })
 
   return (
-    <Button onClick={() => getSellerAccess()} isLoading={isLoading}>
+    <Button
+      onClick={() => getSellerAccess()}
+      isLoading={isLoading}
+      className={className}
+    >
       판매권한 얻기
     </Button>
   )

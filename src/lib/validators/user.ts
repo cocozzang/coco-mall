@@ -5,3 +5,12 @@ export const PostCodeValidator = z.object({
 })
 
 export type PostCodePayload = z.infer<typeof PostCodeValidator>
+
+export const UsernameValidator = z.object({
+  username: z
+    .string()
+    .min(3, { message: "닉네임은 3글자 이상이어야합니다." })
+    .max(30, { message: "닉네임은 30글자 이내여야합니다." }),
+})
+
+export type UsernamePayload = z.infer<typeof UsernameValidator>

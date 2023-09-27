@@ -11,10 +11,10 @@ export const useCustomToast = () => {
       variant: "destructive",
       action: (
         <ToastAction
-          altText="판매자 페이지 이동"
-          onClick={() => router.push("/seller")}
+          altText="로그인 페이지로 이동"
+          onClick={() => router.push("/sign-in")}
         >
-          판매자 페이지 이동
+          로그인 페이지로 이동
         </ToastAction>
       ),
     })

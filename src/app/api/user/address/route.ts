@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { PostCodeValidator } from "@/lib/validators/postcode"
+import { PostCodeValidator } from "@/lib/validators/user"
 import { z } from "zod"
 
 export async function GET(req: Request) {

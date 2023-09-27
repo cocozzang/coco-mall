@@ -12,15 +12,21 @@ import usePostcode from "@/hooks/use-postcode"
 import { Button, buttonVariants } from "./ui/button"
 import { Input } from "./ui/input"
 
-import { PostCodePayload, PostCodeValidator } from "@/lib/validators/postcode"
+import { PostCodePayload, PostCodeValidator } from "@/lib/validators/user"
 import { cn } from "@/lib/utils"
+import { Label } from "./ui/label"
 
 interface PostcodeProps {
   zipcode?: string | null
   address?: string | null
+  className?: string
 }
 
-export default function Postcode({ address, zipcode }: PostcodeProps) {
+export default function Postcode({
+  address,
+  zipcode,
+  className,
+}: PostcodeProps) {
   const { addresscode, openPostcode } = usePostcode()
   const [addresscodeValue, setAddresscodeValue] = useState<string>("")
 
@@ -80,57 +86,60 @@ export default function Postcode({ address, zipcode }: PostcodeProps) {
   console.log()
 
   return (
-    <div>
+    <div className={className}>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 mt-4"
       >
         <div>
-          <div>
+          <div className="flex gap-2 items-center p-1">
+            <Label>우편번호</Label>
             {errors.addresscode?.message && (
               <p className="text-sm text-red-400">
                 *{errors.addresscode?.message}
               </p>
             )}
+          </div>
+          <div className="flex gap-2">
+            <Input
+              readOnly
+              placeholder="우편번호찾기"
+              className="w-[500px] focus-visible:ring-0"
+              value={addresscodeValue}
+              {...register("addresscode")}
+            />
 
-            <div className="flex gap-2">
-              <Input
-                readOnly
-                placeholder="우편번호찾기"
-                className="w-[500px] focus-visible:ring-0"
-                value={addresscodeValue}
-                {...register("addresscode")}
-              />
-
-              <Button type="button" onClick={openPostcode}>
-                <p>우편번호찾기</p> <SearchIcon size={16} className="ml-1" />
-              </Button>
-            </div>
+            <Button type="button" onClick={openPostcode}>
+              <p>우편번호찾기</p> <SearchIcon size={16} className="ml-1" />
+            </Button>
           </div>
         </div>
 
         <div>
-          <div>
+          <div className="flex gap-2 items-center p-1">
+            <Label>상세주소</Label>
             {errors.detailAddress?.message && (
               <p className="text-sm text-red-400">
                 *{errors.detailAddress?.message}
               </p>
             )}
-            <Input
-              className="w-[500px] focus-visible:ring-0"
-              placeholder="상세주소"
-              {...register("detailAddress")}
-            />
           </div>
+          <Input
+            className="w-[500px] focus-visible:ring-0"
+            placeholder="상세주소"
+            {...register("detailAddress")}
+          />
         </div>
 
-        <Input
-          type="submit"
-          value={"배송지 변경"}
-          className={cn(buttonVariants(), "w-[200px]")}
-          onClick={handleSubmit(onSubmit)}
-          disabled={btnDisalbe || isLoading}
-        />
+        <div>
+          <Input
+            type="submit"
+            value={"배송지 변경"}
+            className={cn(buttonVariants(), "w-auto")}
+            onClick={handleSubmit(onSubmit)}
+            disabled={btnDisalbe || isLoading}
+          />
+        </div>
       </form>
     </div>
   )
