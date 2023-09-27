@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { ResidenceValidator } from "@/lib/validators/residence"
+import { PostCodeValidator } from "@/lib/validators/postcode"
 import { z } from "zod"
 
 export async function GET(req: Request) {
@@ -42,21 +42,24 @@ export async function POST(req: Request) {
 
     const body = await req.json()
 
-    const { address, zipcode } = ResidenceValidator.parse(body)
+    const { addresscode, detailAddress } = PostCodeValidator.parse(body)
 
     const user = await db.user.upsert({
       where: {
         id: session.user.id,
       },
       update: {
-        zipcode,
-        address,
+        zipcode: addresscode,
+        address: detailAddress,
       },
       create: {
-        zipcode,
-        address,
+        zipcode: addresscode,
+        address: detailAddress,
       },
       select: {
+        email: true,
+        name: true,
+        username: true,
         zipcode: true,
         address: true,
       },

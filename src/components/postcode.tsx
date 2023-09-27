@@ -1,79 +1,137 @@
 "use client"
 
-import { useState } from "react"
-import DaumPostcode, { useDaumPostcodePopup } from "react-daum-postcode"
-import { Button, buttonVariants } from "./ui/button"
+import { useEffect, useState } from "react"
+import axios from "axios"
 import { SearchIcon } from "lucide-react"
-import usePostcode from "@/hooks/use-postcode"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
-
-import { z } from "zod"
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { zodResolver } from "@hookform/resolvers/zod"
 
-const testValidator = z.object({
-  name: z
-    .string()
-    .min(3, { message: "이름은 3글자 이상, 50글자 이내여야합니다." }),
-  age: z.string().optional(),
-})
+import usePostcode from "@/hooks/use-postcode"
 
-type testRequest = z.infer<typeof testValidator>
+import { Button, buttonVariants } from "./ui/button"
+import { Input } from "./ui/input"
 
-interface PostcodeProps {}
+import { PostCodePayload, PostCodeValidator } from "@/lib/validators/postcode"
+import { cn } from "@/lib/utils"
 
-export default function Postcode({}: PostcodeProps) {
-  const { address, openPostcode } = usePostcode()
+interface PostcodeProps {
+  zipcode?: string | null
+  address?: string | null
+}
 
-  const {} = useMutation({
-    mutationFn: async () => {},
+export default function Postcode({ address, zipcode }: PostcodeProps) {
+  const { addresscode, openPostcode } = usePostcode()
+  const [addresscodeValue, setAddresscodeValue] = useState<string>("")
+
+  const { mutate: postAddress, isLoading } = useMutation({
+    mutationFn: async ({ addresscode, detailAddress }: PostCodePayload) => {
+      const payload: PostCodePayload = { addresscode, detailAddress }
+      const { data } = await axios.post("/api/user/address", payload)
+      return data
+    },
+    onError: (err) => {
+      console.error(err)
+    },
+    onSuccess: () => {
+      alert("배송지 수정 성공")
+    },
   })
 
   const {
     register,
+    watch,
     handleSubmit,
+    control,
+    setValue,
+    getValues,
+    trigger,
     formState: { errors },
-  } = useForm<testRequest>({
-    resolver: zodResolver(testValidator),
+  } = useForm<PostCodePayload>({
+    resolver: zodResolver(PostCodeValidator),
+    defaultValues: {
+      addresscode: zipcode ?? "",
+      detailAddress: address ?? "",
+    },
   })
 
-  const onSubmit = (data: testRequest) => {
-    alert("data" + data.name + ", age" + data.age)
+  const onSubmit = (data: PostCodePayload) => {
+    postAddress(data)
+    console.log("submit data : ", data)
   }
 
   const btnDisalbe = !(Object.keys(errors).length === 0)
 
+  useEffect(() => {
+    if (zipcode) {
+      setAddresscodeValue(zipcode)
+    }
+  }, [zipcode])
+
+  useEffect(() => {
+    if (addresscode) {
+      setValue("addresscode", addresscode)
+      setAddresscodeValue(getValues("addresscode"))
+      trigger("addresscode")
+    }
+  }, [addresscode, setValue, getValues, trigger])
+
+  // test
+  console.log()
+
   return (
     <div>
-      <div className="">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4 mt-4"
+      >
         <div>
-          <Label htmlFor="zipcode">우편번호</Label>
-          <div className="flex gap-2">
-            <Input
-              readOnly
-              className="w-[500px] focus-visible:ring-0"
-              placeholder="우편번호찾기"
-              value={address}
-            />
+          <div>
+            {errors.addresscode?.message && (
+              <p className="text-sm text-red-400">
+                *{errors.addresscode?.message}
+              </p>
+            )}
 
-            <Button type="button" onClick={openPostcode}>
-              <p>우편번호찾기</p> <SearchIcon size={16} className="ml-1" />
-            </Button>
+            <div className="flex gap-2">
+              <Input
+                readOnly
+                placeholder="우편번호찾기"
+                className="w-[500px] focus-visible:ring-0"
+                value={addresscodeValue}
+                {...register("addresscode")}
+              />
+
+              <Button type="button" onClick={openPostcode}>
+                <p>우편번호찾기</p> <SearchIcon size={16} className="ml-1" />
+              </Button>
+            </div>
           </div>
         </div>
 
         <div>
           <div>
-            <Label htmlFor="address">상세주소</Label>
+            {errors.detailAddress?.message && (
+              <p className="text-sm text-red-400">
+                *{errors.detailAddress?.message}
+              </p>
+            )}
             <Input
               className="w-[500px] focus-visible:ring-0"
               placeholder="상세주소"
+              {...register("detailAddress")}
             />
           </div>
         </div>
-      </div>
+
+        <Input
+          type="submit"
+          value={"배송지 변경"}
+          className={cn(buttonVariants(), "w-[200px]")}
+          onClick={handleSubmit(onSubmit)}
+          disabled={btnDisalbe || isLoading}
+        />
+      </form>
     </div>
   )
 }

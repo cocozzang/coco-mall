@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useDaumPostcodePopup } from "react-daum-postcode"
 
 export default function usePostcode() {
-  const [address, setAddress] = useState<string>("")
+  const [addresscode, setAddresscode] = useState<string>("")
 
   const scriptUrl =
     "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
@@ -13,7 +13,6 @@ export default function usePostcode() {
     console.log("data : ", data)
     let fullAddress = data.address
     let extraAddress = ""
-    let zonecode = ""
 
     if (data.addressType === "R") {
       if (data.bname !== "") {
@@ -31,12 +30,12 @@ export default function usePostcode() {
       }
     }
 
-    setAddress(fullAddress)
+    setAddresscode(fullAddress)
   }
 
   const openPostcode = () => {
     open({ onComplete: handleComplete })
   }
 
-  return { openPostcode, address }
+  return { openPostcode, addresscode }
 }
