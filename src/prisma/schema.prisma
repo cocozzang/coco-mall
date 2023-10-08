@@ -141,12 +141,12 @@ model Goods {
   thumbnail String
   image     GoodsImage[]
 
-  Option Option[]
+  option Option[]
 
   review          Review[]
   cartItem        CartItem[]
   wishlist        Wishlist[]
-  TransactionItem TransactionItem[]
+  transactionItem TransactionItem[]
 }
 
 model GoodsImage {
@@ -159,13 +159,15 @@ model GoodsImage {
 
 model Option {
   id         String @id @default(cuid())
-  optionName String @unique
+  optionName String
   inventory  Int?
 
   goods   Goods  @relation(fields: [goodsId], references: [id], onDelete: Cascade)
   goodsId String
 
   optionValue OptionValue[]
+
+  @@unique([id, optionName])
 }
 
 model OptionValue {
@@ -179,7 +181,7 @@ model OptionValue {
 
 model Category {
   id    String  @id @default(cuid())
-  name  String
+  name  String // 의류 식품 생활용품
   goods Goods[]
 }
 
@@ -203,6 +205,6 @@ model ReviewImage {
   id       String @id @default(cuid())
   imageUrl String
 
-  Review   Review? @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  review   Review? @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   reviewId String?
 }

@@ -40,7 +40,7 @@ export default async function UserSettingsPage({}: UserSettingsPageProps) {
         <EditUsername username={userInfo?.username} />
       </div>
 
-      <SellerAccess className="my-2" />
+      {session?.user.role === 1 && <SellerAccess className="my-2" />}
     </div>
   )
 }
