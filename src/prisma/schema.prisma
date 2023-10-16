@@ -77,8 +77,8 @@ model CartItem {
   cart   Cart?   @relation(fields: [cartId], references: [id])
   cartId String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Wishlist {
@@ -89,27 +89,27 @@ model Wishlist {
 }
 
 model Transaction {
-  id          String   @id @default(cuid())
-  buyer       User     @relation(fields: [buyerId], references: [id])
+  id          String    @id @default(cuid())
+  buyer       User      @relation(fields: [buyerId], references: [id])
   buyerId     String
   price       Int
   deliveryFee Int
   totalPrice  Int
   zipcode     String
   address     String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
 
   transactionItem TransactionItem[]
 }
 
 model TransactionItem {
-  id               String   @id @default(cuid())
+  id               String    @id @default(cuid())
   quantity         Int
   transactionState Int // 1:주문완료 , 2:상품준비중, 3:배송중, 4배송완료, 5:거래완료, 6: 리뷰완료, 7:취소/반품심사상태, 8: 반품배송중, 9:취소/반품완료 
-  isRated          Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  isRated          Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @updatedAt
 
   goods   Goods  @relation(fields: [goodsId], references: [id])
   goodsId String
@@ -119,18 +119,18 @@ model TransactionItem {
 }
 
 model Goods {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
   price       Int
-  deliveryFee Int      @default(0)
-  rating      BigInt   @default(0) // 별점 
-  reviewCount Int      @default(0)
+  deliveryFee Int       @default(0)
+  rating      BigInt    @default(0) // 별점 
+  reviewCount Int       @default(0)
   content     Json?
   inventory   Int?
-  isInventory Boolean  @default(true)
-  state       Int // 1: 판매중 , 2: 재고소진 , 3: 등록심사신청상태 , 4: 판매중지
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isInventory Boolean   @default(true)
+  state       Int       @default(1) // 1: 판매중 , 2: 재고소진 , 3: 등록심사신청상태 , 4: 판매중지
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
 
   sellerId String
   seller   User   @relation(fields: [sellerId], references: [id])
@@ -186,11 +186,11 @@ model Category {
 }
 
 model Review {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   rating    Int
   content   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
