@@ -8,16 +8,16 @@ interface GoodsDetailPageProps {
 export default async function GoodsDetailPage({
   params: { goodsId },
 }: GoodsDetailPageProps) {
-  const post = await db.goods.findFirst({
+  const goods = await db.goods.findFirst({
     where: { id: goodsId },
   })
   return (
     <div>
-      <div>{post?.name}</div>
-      <div>{post?.price}</div>
-      {post?.thumbnail && (
+      <div>{goods?.name}</div>
+      <div>{goods?.price}</div>
+      {goods?.thumbnail && (
         <Image
-          src={post?.thumbnail}
+          src={goods?.thumbnail}
           alt="goods thumnail"
           width={300}
           height={300}
