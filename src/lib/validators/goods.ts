@@ -70,13 +70,18 @@ export const GoodsValidator = z
       .int({ message: "가격에 소수점은 포함 될 수 없습니다." })
       .gte(1, { message: "상품 재고는 1개 이상이어야합니다." })
       .optional(),
-    category: z.string().refine((value) => {
-      return value === "의류" || value === "생활용품" || value === "식품"
-    }),
+    // category: z.string().refine((value) => {
+    //   return value === "의류" || value === "생활용품" || value === "식품"
+    // }),
+    category: z.union([
+      z.literal("의류"),
+      z.literal("생활용퓸"),
+      z.literal("식품"),
+    ]),
     thumbnail: z
       .string()
       .min(1, { message: "thumbnail 이미지는 필수값입니다." }),
-    image: z.string().optional(),
+    image: z.array(z.string()).optional(),
   })
   .refine(
     (data) => {
@@ -115,6 +120,6 @@ GoodsValidator.parse({
       ],
     },
   ],
-  category: "식품",
+  category: "코코",
   thumbnail: "path/newGoods.jpg",
 })
