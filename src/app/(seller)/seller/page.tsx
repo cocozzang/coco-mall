@@ -1,6 +1,7 @@
 import { getAuthSession } from "@/lib/auth"
 import { db } from "@/lib/db"
 import RegisterdGoods from "./_components/registerd-goods"
+import RegistrationButtonClient from "./_components/registration-button-client"
 
 interface SellerMainPageProps {}
 
@@ -25,7 +26,7 @@ export default async function SellerMainPage({}: SellerMainPageProps) {
       <div>배송보내기</div>
       <div>배송완료하기</div>
       <br />
-      <div>새 상품 등록하기</div>
+      <RegistrationButtonClient />
     </div>
   )
 }

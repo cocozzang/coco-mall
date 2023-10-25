@@ -61,6 +61,9 @@ export default function UserAccountNav({ session }: UserAccountNavProps) {
                 <DropdownMenuItem>
                   <Link href={"/seller"}>상품/판매 관리</Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href={"/seller/registration"}>상품등록</Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
               </>
             )}
