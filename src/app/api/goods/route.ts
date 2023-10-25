@@ -12,6 +12,8 @@ export async function POST(req: Request) {
       return new Response("Unauthorized", { status: 401 })
     }
 
+    const body = await req.json()
+
     const {
       category: categoryName,
       deliveryFee,
@@ -22,7 +24,7 @@ export async function POST(req: Request) {
       image,
       inventory,
       option,
-    } = GoodsValidator.parse(req.body)
+    } = GoodsValidator.parse(body)
 
     const category = await db.category.findFirst({
       where: { name: categoryName },
@@ -39,15 +41,19 @@ export async function POST(req: Request) {
         }[]
       | []
 
-    const createImageObj = (images: string[] | undefined | null): ImageObj => {
+    const createImageObj = (
+      images: string[] | undefined | null,
+      goodsId: string
+    ): ImageObj => {
       if (images && images.length > 0) {
         return images.map((image, _) => ({
           imageUrl: image,
-          goodsId: goods.id,
+          goodsId,
         }))
       } else return []
     }
 
+    // TODO: option 로직 추가하기
     // type OptionType = typeof option
 
     // const createOptionObj = (option: OptionType) => {
@@ -67,12 +73,38 @@ export async function POST(req: Request) {
         deliveryFee,
         content,
         inventory: inventory ?? null,
-        image: {
-          createMany: { data: createImageObj(image) },
-        },
       },
     })
+
+    // const goodsImage = await db.goodsImage.create({
+    //   data: {
+    //     goodsId: goods.id,
+    //     imageUrl: {
+    //       createMany: { data: createImageObj(image) },
+    //     },
+    //   },
+    // })
+
+    const goodsImage = await db.goodsImage.createMany({
+      data: createImageObj(image, goods.id),
+    })
+
+    const res = { ...goods, ...goodsImage }
+
+    const serializedRes = JSON.stringify({
+      ...res,
+      rating: res.rating.toString(),
+    })
+
+    return new Response(serializedRes, {
+      status: 200,
+      statusText: "OK",
+      headers: new Headers({
+        "Content-Type": "application/json",
+      }),
+    })
   } catch (error) {
+    console.log(error)
     if (error instanceof z.ZodError) {
       return new Response(
         "유효하지 않은 payload입니다. 양식에 맞는 데이터를 전달해주세요.",
