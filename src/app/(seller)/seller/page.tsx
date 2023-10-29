@@ -17,9 +17,11 @@ export default async function SellerMainPage({}: SellerMainPageProps) {
   const goodsCount = await db.goods.count()
 
   return (
-    <div>
+    <main>
       <div>내가 등록한 상품 / (전체보기)</div>
-      <RegisterdGoods goodsList={goodsList} goodsCount={goodsCount} />
+      <div>
+        <RegisterdGoods goodsList={goodsList} goodsCount={goodsCount} />
+      </div>
 
       <br />
       <div>결제된 상품 (전체보기)</div>
@@ -27,6 +29,6 @@ export default async function SellerMainPage({}: SellerMainPageProps) {
       <div>배송완료하기</div>
       <br />
       <RegistrationButtonClient />
-    </div>
+    </main>
   )
 }

@@ -11,10 +11,12 @@ export default function RegisterdGoods({
   goodsCount,
 }: RegisterdGoodsProps) {
   return (
-    <div className="grid">
-      {goodsList.map((goods, index) => (
-        <GoodsCard goods={goods} key={goods.id} />
-      ))}
+    <div>
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1">
+        {goodsList.map((goods) => (
+          <GoodsCard goods={goods} key={goods.id} />
+        ))}
+      </div>
     </div>
   )
 }

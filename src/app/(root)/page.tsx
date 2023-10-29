@@ -1,12 +1,11 @@
-import { Asap_Condensed } from "next/font/google"
-import Image from "next/image"
-import { addAbortSignal } from "stream"
+import { db } from "@/lib/db"
+import RecommandGoodsSection from "./_components/recommand-goods-section"
 
-export default function Home() {
+export default async function Home() {
   return (
     <main>
       <div>hi coco mall!</div>
-      <div>추천상품</div>
+      <RecommandGoodsSection />
       <div>최근 본 상품</div>
       <div>자주 구매 한 상품</div>
       <div>카테고리1 상품</div>

@@ -6,7 +6,7 @@ interface SearchBarProps {}
 
 export default function SearchBar({}: SearchBarProps) {
   return (
-    <Command className="max-w-[500px] shadow-md">
+    <Command className="max-w-[500px] shadow-md hidden sm:block">
       <CommandInput placeholder="검색어를 입력하세요..." />
     </Command>
   )
