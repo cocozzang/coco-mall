@@ -59,29 +59,41 @@ export default function UserAccountNav({ session }: UserAccountNavProps) {
             {session?.user.role === 2 && (
               <>
                 <DropdownMenuItem>
-                  <Link href={"/seller"}>상품/판매 관리</Link>
+                  <Link href={"/seller"} className="w-full">
+                    상품/판매 관리
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href={"/seller/registration"}>상품등록</Link>
+                  <Link href={"/seller/registration"} className="w-full">
+                    상품등록
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
               </>
             )}
 
             <DropdownMenuItem>
-              <Link href={"/order"}>주문목록</Link>
+              <Link href={"/order"} className="w-full">
+                주문목록
+              </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem>
-              <Link href={"/cancel-return-refund"}>취소/반품</Link>
+              <Link href={"/cancel-return-refund"} className="w-full">
+                취소/반품
+              </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem>
-              <Link href={"/wishlist"}>찜 리스트</Link>
+              <Link href={"/wishlist"} className="w-full">
+                찜 리스트
+              </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem>
-              <Link href={"/settings"}>계정설정</Link>
+              <Link href={"/settings"} className="w-full">
+                계정설정
+              </Link>
             </DropdownMenuItem>
 
             <DropdownMenuSeparator />
