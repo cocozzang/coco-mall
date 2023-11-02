@@ -4,7 +4,7 @@ import { Goods } from "@prisma/client"
 import Image from "next/image"
 import RatingStar from "../rating/rating-star"
 import { cn } from "@/lib/utils"
-import FreeDeloveryBadge from "./free-delivery-badge"
+import FreeDeloveryBadge from "../common/free-delivery-badge"
 
 interface GoodsCardProps {
   goods: Goods
@@ -30,11 +30,7 @@ export default function GoodsCard({ goods, className }: GoodsCardProps) {
       </div>
 
       <div className="pt-1">
-        {goods.deliveryFee === 0 && (
-          // TODO: 무료배송 shadcn ui badge써서 ui만들기
-          <FreeDeloveryBadge />
-          // <p className="text-zinc-400 text-sm p-[1px]">무료배송</p>
-        )}
+        {goods.deliveryFee === 0 && <FreeDeloveryBadge />}
         <p
           className="w-[230px] overflow-hidden whitespace-no-wrap text-ellipsis line-clamp-2"
           style={{ WebkitBoxOrient: "vertical", wordBreak: "break-word" }}

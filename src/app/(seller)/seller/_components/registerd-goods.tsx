@@ -1,4 +1,4 @@
-import GoodsCard from "@/components/common/goods-card"
+import GoodsCard from "@/components/goods/goods-card"
 import { Goods } from "@prisma/client"
 
 interface RegisterdGoodsProps {
