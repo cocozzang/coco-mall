@@ -5,6 +5,7 @@ import Image from "next/image"
 import RatingStar from "../rating/rating-star"
 import { cn } from "@/lib/utils"
 import FreeDeloveryBadge from "../common/free-delivery-badge"
+import { useRouter } from "next/navigation"
 
 interface GoodsCardProps {
   goods: Goods
@@ -12,9 +13,11 @@ interface GoodsCardProps {
 }
 
 export default function GoodsCard({ goods, className }: GoodsCardProps) {
+  const router = useRouter()
   return (
     <div
       className={cn("max-w-[230px] h-[350px] hover:shadow-xl p-1", className)}
+      onClick={() => router.push(`goods/${goods.id}`)}
     >
       <div className="w-full max-w-[220px] h-[200px] relative mx-auto">
         <Image

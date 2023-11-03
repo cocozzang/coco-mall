@@ -7,6 +7,7 @@ import RatingStar from "../rating/rating-star"
 import { Goods } from "@prisma/client"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
+import { useRouter } from "next/navigation"
 
 interface GoodsSliderProps {
   goodsList: Goods[]
@@ -125,10 +126,13 @@ interface SliderCardProps {
 }
 
 function SliderCard({ goods, index, className }: SliderCardProps) {
+  const router = useRouter()
+
   return (
     <div
       className={cn("max-w-[250px] h-[300px] group", className)}
       id={`${index}`}
+      onClick={() => router.push(`goods/${goods.id}`)}
     >
       <div className="w-[204px] h-[200px] relative mx-auto">
         <Image
@@ -146,7 +150,7 @@ function SliderCard({ goods, index, className }: SliderCardProps) {
       <div className="pt-1">
         {goods.deliveryFee === 0 && <FreeDeloveryBadge />}
         <p
-          className="w-[204px] text-xs overflow-hidden whitespace-no-wrap text-ellipsis line-clamp-2 group-hover:underline"
+          className="w-[204px] text-xs overflow-hidden whitespace-no-wrap text-ellipsis line-clamp-2 group-hover:underline cursor-pointer"
           style={{ WebkitBoxOrient: "vertical", wordBreak: "break-word" }}
         >
           {goods.name}
