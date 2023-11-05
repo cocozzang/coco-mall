@@ -1,5 +1,6 @@
 import { db } from "@/lib/db"
 import Image from "next/image"
+import ImageViewer from "../../_components/image-viewer"
 
 interface GoodsDetailPageProps {
   params: { goodsId: string }
@@ -10,19 +11,15 @@ export default async function GoodsDetailPage({
 }: GoodsDetailPageProps) {
   const goods = await db.goods.findFirst({
     where: { id: goodsId },
+    include: { image: true },
   })
+
   return (
     <div>
       <div>{goods?.name}</div>
       <div>{goods?.price}</div>
-      {goods?.thumbnail && (
-        <Image
-          src={goods?.thumbnail}
-          alt="goods thumnail"
-          width={300}
-          height={300}
-        />
-      )}
+      <ImageViewer goods={goods} />
+      <div className="border-t-2 border-zinc-700 my-12" />
     </div>
   )
 }

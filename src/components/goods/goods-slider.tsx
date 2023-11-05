@@ -139,7 +139,6 @@ function SliderCard({ goods, index, className }: SliderCardProps) {
           className="object-contain"
           src={goods.thumbnail}
           sizes="(max-width: : 1024px) 100vw, 250px"
-          priority
           fill
           alt={`${goods.name} thumbnail`}
           placeholder="blur"
