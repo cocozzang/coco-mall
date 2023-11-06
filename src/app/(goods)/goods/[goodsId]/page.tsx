@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
-import Image from "next/image"
-import ImageViewer from "../../_components/image-viewer"
+import GoodsInteractionSection from "../../_components/goods-interaction-section"
+import { getAuthSession } from "@/lib/auth"
 
 interface GoodsDetailPageProps {
   params: { goodsId: string }
@@ -9,17 +9,33 @@ interface GoodsDetailPageProps {
 export default async function GoodsDetailPage({
   params: { goodsId },
 }: GoodsDetailPageProps) {
+  const session = await getAuthSession()
+
   const goods = await db.goods.findFirst({
     where: { id: goodsId },
-    include: { image: true },
+    include: { image: true, seller: true, option: true },
+  })
+
+  const wishList = await db.wishlist.findFirst({
+    where: {
+      user: { id: session?.user.id },
+      goods: { some: { id: goodsId } },
+    },
   })
 
   return (
-    <div>
-      <div>{goods?.name}</div>
-      <div>{goods?.price}</div>
-      <ImageViewer goods={goods} />
-      <div className="border-t-2 border-zinc-700 my-12" />
+    <div className="max-w-[1024px] mx-auto">
+      {/* Goods Interaction Section */}
+      <GoodsInteractionSection goods={goods} wishList={wishList} />
+
+      {/* Goods Content Section */}
+      <div className="mt-10">Goods Content Section</div>
+
+      {/* Similar Goods Section */}
+      <div className="mt-10">Similar Goods Section</div>
+
+      {/* Goods Review Section */}
+      <div className="mt-10">Goods Review Section</div>
     </div>
   )
 }
